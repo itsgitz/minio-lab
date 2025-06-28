@@ -10,9 +10,13 @@ async function main() {
     if (!process.env.AWS_SECRET_ACCESS_KEY)
       throw new Error("AWS_SECRET_ACCESS_KEY is not set");
 
+    if (!process.env.AWS_BUCKET_NAME)
+      throw new Error("AWS_BUCKET_NAME is not set.");
+
     const endpoint = process.env.AWS_ENDPOINT;
     const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
     const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+    const bucketName = process.env.AWS_BUCKET_NAME;
 
     const client = new S3Client({
       region: "us-east-1",
@@ -23,7 +27,7 @@ async function main() {
       endpoint,
     });
     const command = new ListObjectsV2Command({
-      Bucket: "desmond-bucket",
+      Bucket: bucketName,
     });
     const response = await client.send(command);
 
