@@ -16,7 +16,10 @@ async function main() {
     const endpoint = process.env.AWS_ENDPOINT;
     const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
     const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-    const bucketName = process.env.AWS_BUCKET_NAME;
+    //const bucketName = process.env.AWS_BUCKET_NAME;
+    const bucketName = process.argv[2];
+
+    if (!bucketName) throw new Error("Bucket Name is required.");
 
     const client = new S3Client({
       region: "us-east-1",
@@ -25,6 +28,8 @@ async function main() {
         secretAccessKey,
       },
       endpoint,
+      // TODO: remove this, make the MinIO server don't use subdomain
+      forcePathStyle: true,
     });
     const command = new ListObjectsV2Command({
       Bucket: bucketName,
